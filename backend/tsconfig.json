@@ -6,8 +6,8 @@
   "compilerOptions": {
     "plugins": [{ "transform": "typescript-transform-paths" }],
     "paths": {
-      "@ideanick/webapp/*": ["../webapp/*"],
-      "@ideanick/shared/*": ["../shared/*"]
+      "@tutor1/webapp/*": ["../webapp/*"],
+      "@tutor1/shared/*": ["../shared/*"]
     },
     "outDir": "./dist",
     "allowJs": true,
