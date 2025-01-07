@@ -1,0 +1,24 @@
+{
+  "name": "tutor1",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "b": "pnpm --filter @tutor1/backend",
+    "w": "pnpm --filter @tutor1/webapp",
+    "dev": "pnpm -r --parallel dev",
+    "lint": "concurrently 'pnpm b lint' 'pnpm w lint'",
+    "types": "concurrently 'pnpm b types' 'pnpm w types' ",
+    "prettify": "pnpm -r --parallel prettify",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.3.0",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.7.2"
+  }
+}

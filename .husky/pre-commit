@@ -1,0 +1,4 @@
+pnpm test
+pnpm lint
+pnpm types
+pnpm prettify
