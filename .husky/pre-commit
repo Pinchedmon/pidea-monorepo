@@ -1,4 +1,3 @@
-
 pnpm lint
 pnpm types
 pnpm prettify
