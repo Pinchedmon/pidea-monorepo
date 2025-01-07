@@ -20,8 +20,7 @@
     "pgc": "prisma generate",
     "types": "tsc --noEmit --project ./tsconfig.json",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/.eslintcache ",
-    "prettify": "prettier --loglevel warn --cache --write '{src/**/*,*}.{ts,tsx,js,json,yml,scss}' '!**/{node_modules,dist}/**/*'",
-    "prepare": "pnpm pgc && ts-patch install -s"
+    "prettify": "prettier --loglevel warn --cache --write '{src/**/*,*}.{ts,tsx,js,json,yml,scss}' '!**/{node_modules,dist}/**/*'"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma"
@@ -59,7 +58,7 @@
     "trpc-playground": "^1.0.4",
     "winston": "^3.10.0",
     "yaml": "^2.3.2",
-    "zod": "^3.22.2"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -69,7 +68,7 @@
     "@types/debug": "^4.1.8",
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.2",
-    "@types/lodash": "^4.14.198",
+    "@types/lodash": "^4.17.14",
     "@types/node": "^20.5.0",
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.9",
