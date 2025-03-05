@@ -1,13 +1,17 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
+import { Request, Response } from "express";
 
-export const createAppContext = () => {
-  const prisma = new PrismaClient()
+export const createAppContext = (req?: Request, res?: Response) => {
+  const prisma = new PrismaClient();
   return {
     prisma,
+    me: req?.user,
+    req,
+    res,
     stop: async () => {
-      await prisma.$disconnect()
+      await prisma.$disconnect();
     },
-  }
-}
+  };
+};
 
-export type AppContext = ReturnType<typeof createAppContext>
+export type AppContext = ReturnType<typeof createAppContext>;

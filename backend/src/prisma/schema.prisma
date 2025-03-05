@@ -1,5 +1,6 @@
 generator client {
-    provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -7,23 +8,89 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
+model Image {
     id        String   @id @default(uuid())
-    nick      String   @unique
-    name      String   @default("")
-    password  String
+    url       String
     createdAt DateTime @default(now())
-    ideas     Idea[]
+    user      User?    @relation(fields: [userId], references: [id])
+    userId    String?  @unique
+    post      Post?    @relation(fields: [postId], references: [id])
+    postId    String?  @unique
+    comment   Comment? @relation(fields: [commentId], references: [id])
+    commentId String?  @unique
 }
 
-model Idea {
-    id           String   @id @default(uuid())
-    nick         String   @unique
-    serialNumber Int      @unique @default(autoincrement())
-    name         String
-    description  String
-    text         String
-    createdAt    DateTime @default(now())
-    authorId     String
-    author       User     @relation(fields: [authorId], references: [id])
+model User {
+    id          String           @id @default(uuid())
+    nick        String           @unique
+    email       String           @unique
+    name        String           @default("")
+    password    String
+    createdAt   DateTime         @default(now())
+    posts       Post[]
+    postLikes   PostLike[]
+    comments    Comment[]
+    permissions UserPermission[]
+    role        UserRole         @default(USER)
+    Image       Image?
+    avatarUrl   String?
+}
+
+enum UserRole {
+    USER // Обычный пользователь
+    MODERATOR // Модератор определенной темы
+    ADMIN // Администратор
+}
+
+enum UserPermission {
+    BLOCK_POSTS
+    ALL
+}
+
+model Post {
+    id        String     @id @default(uuid())
+    text      String
+    theme     Theme
+    createdAt DateTime   @default(now())
+    authorId  String
+    author    User       @relation(fields: [authorId], references: [id])
+    postLikes PostLike[]
+    comments  Comment[]
+    blockedAt DateTime?
+    Image     Image?
+    status    PostStatus @default(PENDING) // Добавляем статус поста
+}
+
+enum PostStatus {
+    PENDING // На проверке
+    APPROVED // Одобрен
+    REJECTED // Отклонен
+}
+
+enum Theme {
+    IT
+    MEDIA
+    TECH
+}
+
+model PostLike {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    post      Post     @relation(fields: [postId], references: [id])
+    postId    String
+    user      User     @relation(fields: [userId], references: [id])
+    userId    String
+
+    @@unique([postId, userId])
+}
+
+model Comment {
+    id        String   @id @default(uuid())
+    content   String
+    createdAt DateTime @default(now())
+    post      Post     @relation(fields: [postId], references: [id])
+    postId    String
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String
+    Image     Image?
 }

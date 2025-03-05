@@ -1,42 +1,40 @@
-import { initTRPC } from '@trpc/server'
-import * as trpcExpress from '@trpc/server/adapters/express'
-import { type Express } from 'express'
-import { TrpcRouter } from '../router'
-import { type AppContext } from './ctx'
-import superjson from 'superjson'
-import { expressHandler } from 'trpc-playground/handlers/express'
-import { ExpressRequest } from '../utils/types'
+import { initTRPC } from "@trpc/server";
+import { AppContext } from "./ctx";
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { ExpressRequest } from "../utils/types";
+import { TrpcRouter } from "../router";
+import { type Express } from "express";
+import superjson from "superjson";
 
+// Функция для создания контекста TRPC
 const getCreateTrpcContext =
   (appContext: AppContext) =>
-  ({ req }: trpcExpress.CreateExpressContextOptions) => ({
+  ({ req, res }: trpcExpress.CreateExpressContextOptions) => ({
     ...appContext,
+    req, // Передаем req
+    res, // Передаем res
     me: (req as ExpressRequest).user || null,
-  })
+  });
 
-type TrpcContext = ReturnType<typeof getCreateTrpcContext>
+// Определение типа контекста TRPC
+export type TrpcContext = ReturnType<typeof getCreateTrpcContext>;
 
+// Инициализация TRPC с контекстом и трансформером
 export const trpc = initTRPC.context<TrpcContext>().create({
   transformer: superjson,
-})
+});
 
-export const applyTrpcToExpressApp = async (expressApp: Express, appContext: AppContext, trpcRouter: TrpcRouter) => {
+// Функция для применения TRPC к Express приложению
+export const applyTrpcToExpressApp = async (
+  expressApp: Express,
+  appContext: AppContext,
+  trpcRouter: TrpcRouter
+) => {
   expressApp.use(
-    '/trpc',
+    "/trpc",
     trpcExpress.createExpressMiddleware({
       router: trpcRouter,
       createContext: getCreateTrpcContext(appContext),
     })
-  )
-  expressApp.use(
-    '/trpc-playground',
-    await expressHandler({
-      trpcApiEndpoint: '/trpc',
-      playgroundEndpoint: '/trpc-playground',
-      router: trpcRouter,
-      request: {
-        superjson: true,
-      },
-    })
-  )
-}
+  );
+};
